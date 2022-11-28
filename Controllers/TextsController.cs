@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using info_2022.Data;
 using info_2022.Models;
 using info_2022.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace info_2022.Controllers
 {
@@ -70,6 +71,7 @@ namespace info_2022.Controllers
         }
 
         // GET: List
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> List()
         {
             var applicationDbContext = _context.Texts.Include(t => t.Category).Include(t => t.User);

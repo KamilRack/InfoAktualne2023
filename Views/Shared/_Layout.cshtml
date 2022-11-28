@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - info_2022</title>
     <link rel="stylesheet" href="~/css/bootstrap_colors.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.13.1/datatables.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/info_2022.styles.css" asp-append-version="true" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,6 +44,12 @@
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Kategorie</a></li>
                                         <li><hr class="dropdown-divider"></li>
+                                        @if (User.IsInRole("admin"))
+                                        {
+                                            <li>
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Texts" asp-action="List">Lista tekstów</a>
+                                            </li>
+                                        }
                                     </ul>
                                 </li>
                             }
