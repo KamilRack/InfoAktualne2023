@@ -9,16 +9,20 @@ using info_2022.Data;
 using info_2022.Models;
 using info_2022.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using info_2022.Infrastructure;
 
 namespace info_2022.Controllers
 {
     public class TextsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private IWebHostEnvironment _hostEnvironment;
 
-        public TextsController(ApplicationDbContext context)
+        public TextsController(ApplicationDbContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _hostEnvironment = environment;
         }
 
         // GET: Texts
@@ -101,8 +105,7 @@ namespace info_2022.Controllers
         // GET: Texts/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Description");
-            ViewData["Id"] = new SelectList(_context.AppUsers, "Id", "Id");
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name");
             return View();
         }
 
@@ -111,16 +114,34 @@ namespace info_2022.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TextId,Title,Summary,Keywords,Content,Graphic,Active,AddedDate,CategoryId,Id")] Text text)
+        public async Task<IActionResult> Create([Bind("TextId,Title,Summary,Keywords,Content,Active,CategoryId")] Text text, IFormFile? picture)
         {
             if (ModelState.IsValid)
             {
+                text.Id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                text.AddedDate = DateTime.Now;
+
+                if (picture != null && picture.Length > 0)
+                {
+                    ImageFileUpload imageFileResult = new(_hostEnvironment);
+                    FileSendResults fileSendResult = imageFileResult.SendFile(picture, "img", 600);
+                    if (fileSendResult.Success)
+                    {
+                        text.Graphic = fileSendResult.Name;
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "Wybrany plik nie jest obrazkiem!";
+                        ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", text.CategoryId);
+                        return View(text);
+                    }
+                }
+
                 _context.Add(text);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Description", text.CategoryId);
-            ViewData["Id"] = new SelectList(_context.AppUsers, "Id", "Id", text.Id);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", text.CategoryId);
             return View(text);
         }
 
@@ -137,9 +158,17 @@ namespace info_2022.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Description", text.CategoryId);
-            ViewData["Id"] = new SelectList(_context.AppUsers, "Id", "Id", text.Id);
-            return View(text);
+
+            if (string.Compare(User.FindFirstValue(ClaimTypes.NameIdentifier), text.Id) == 0 || User.IsInRole("admin"))
+            {
+                ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", text.CategoryId);
+                ViewData["Author"] = text.Id;
+                return View(text);
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // POST: Texts/Edit/5
@@ -147,15 +176,31 @@ namespace info_2022.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TextId,Title,Summary,Keywords,Content,Graphic,Active,AddedDate,CategoryId,Id")] Text text)
+        public async Task<IActionResult> Edit(int textid, [Bind("TextId,Title,Summary,Keywords,Content,Graphic,Active,AddedDate,CategoryId,Id")] Text text, IFormFile? picture)
         {
-            if (id != text.TextId)
+            if (textid != text.TextId)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                if (picture != null && picture.Length > 0)
+                {
+                    ImageFileUpload imageFileResult = new(_hostEnvironment);
+                    FileSendResults fileSendResult = imageFileResult.SendFile(picture, "img", 600);
+                    if (fileSendResult.Success)
+                    {
+                        text.Graphic = fileSendResult.Name;
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "Wybrany plik nie jest obrazkiem!";
+                        ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", text.CategoryId);
+                        ViewData["Author"] = text.Id;
+                        return View(text);
+                    }
+                }
                 try
                 {
                     _context.Update(text);
@@ -174,8 +219,8 @@ namespace info_2022.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Description", text.CategoryId);
-            ViewData["Id"] = new SelectList(_context.AppUsers, "Id", "Id", text.Id);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", text.CategoryId);
+            ViewData["Author"] = text.Id;
             return View(text);
         }
 
