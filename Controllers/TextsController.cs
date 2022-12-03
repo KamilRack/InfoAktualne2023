@@ -99,7 +99,39 @@ namespace info_2022.Controllers
                 return NotFound();
             }
 
-            return View(text);
+            TextWithOpinions textWithOpinions = new TextWithOpinions();
+
+            textWithOpinions.SelectedText = await _context.Texts
+                .Include(t => t.Category)
+                .Include(t => t.User)
+                .Include(t => t.Opinions)
+                .ThenInclude(c => c.User)
+                .Where(t => t.Active == true)
+                .FirstOrDefaultAsync(m => m.TextId == id);
+
+            if (textWithOpinions.SelectedText == null)
+            {
+                return NotFound();
+            }
+
+            textWithOpinions.ReadingTime = (int)Math.Ceiling((double)textWithOpinions.SelectedText.Content.Length / 1400);
+
+            textWithOpinions.CommentsNumber = _context.Opinions
+                .Where(x => x.TextId == id)
+                .Count();
+
+            if (textWithOpinions.CommentsNumber != 0)
+            {
+                textWithOpinions.OpinionsNumber = _context.Opinions.Where(o => o.TextId == id).Where(x => x.Rating != null).Count();
+                if (textWithOpinions.OpinionsNumber != 0)
+                {
+                    textWithOpinions.AverageScore = (float)(textWithOpinions.OpinionsNumber > 0 ? _context.Opinions.Where(o => o.TextId == id).Where(x => x.Rating != null).Average(x => (int)x.Rating) : 0);
+                }
+            }
+
+            textWithOpinions.Description = Variaty.Phrase("komentarz", "komentarze", "komentarzy", textWithOpinions.CommentsNumber);
+
+            return View(textWithOpinions);
         }
 
         // GET: Texts/Create
