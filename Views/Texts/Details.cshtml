@@ -55,8 +55,8 @@
     </section>
     </div>
 </article>
-<div class="col-lg-9 offset-lg-3"
-    <section>
+<div class="col-lg-9 offset-lg-3">
+    <section class="mb-3">
         <a asp-action="Index" class="btn btn-primary">Lista tekstów</a>
         @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.SelectedText.Id)
         {
