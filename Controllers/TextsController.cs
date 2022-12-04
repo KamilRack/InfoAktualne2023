@@ -135,6 +135,7 @@ namespace info_2022.Controllers
         }
 
         // GET: Texts/Create
+        [Authorize(Roles = "admin, author")]
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name");
@@ -144,6 +145,7 @@ namespace info_2022.Controllers
         // POST: Texts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "admin, author")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TextId,Title,Summary,Keywords,Content,Active,CategoryId")] Text text, IFormFile? picture)
@@ -178,6 +180,7 @@ namespace info_2022.Controllers
         }
 
         // GET: Texts/Edit/5
+        [Authorize(Roles = "admin, author")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Texts == null)
@@ -206,6 +209,7 @@ namespace info_2022.Controllers
         // POST: Texts/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "admin, author")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int textid, [Bind("TextId,Title,Summary,Keywords,Content,Graphic,Active,AddedDate,CategoryId,Id")] Text text, IFormFile? picture)
@@ -257,6 +261,7 @@ namespace info_2022.Controllers
         }
 
         // GET: Texts/Delete/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Texts == null)
@@ -277,6 +282,7 @@ namespace info_2022.Controllers
         }
 
         // POST: Texts/Delete/5
+        [Authorize(Roles = "admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

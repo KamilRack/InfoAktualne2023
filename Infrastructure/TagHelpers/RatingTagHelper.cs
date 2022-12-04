@@ -22,6 +22,13 @@ namespace info_2022.Infrastructure.TagHelpers
                 ocena = EmptyStar(5);
                 strSb.AppendFormat(ocena);
             }
+            else if (RatingCount == 1)
+            {
+                int full = (int)RatingAvg;
+                ocena = FullStar(full);
+                ocena = EmptyStar(5 - full);
+                strSb.AppendFormat(ocena);
+            }
             else
             {
                 double value = Math.Round(RatingAvg * 2, 0, MidpointRounding.AwayFromZero);
