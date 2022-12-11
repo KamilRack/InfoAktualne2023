@@ -132,6 +132,8 @@ namespace info_2022.Controllers
             }
             ViewData["TextId"] = opinion.TextId;
             ViewData["Author"] = opinion.Id;
+            ViewData["Rating"] = new SelectList(Enum.GetNames(typeof(TypeOfGrade)), opinion.Rating);
+
             return View(opinion);
         }
 
