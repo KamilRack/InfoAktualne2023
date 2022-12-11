@@ -130,8 +130,8 @@ namespace info_2022.Controllers
             {
                 return NotFound();
             }
-            ViewData["TextId"] = new SelectList(_context.Texts, "TextId", "Content", opinion.TextId);
-            ViewData["Id"] = new SelectList(_context.AppUsers, "Id", "Id", opinion.Id);
+            ViewData["TextId"] = opinion.TextId;
+            ViewData["Author"] = opinion.Id;
             return View(opinion);
         }
 
@@ -141,9 +141,9 @@ namespace info_2022.Controllers
         [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OpinionId, Comment, AddedDate, Rating, TextId, Id")] Opinion opinion)
+        public async Task<IActionResult> Edit(int opinionid, [Bind("OpinionId, Comment, AddedDate, Rating, TextId, Id")] Opinion opinion)
         {
-            if (id != opinion.OpinionId)
+            if (opinionid != opinion.OpinionId)
             {
                 return NotFound();
             }
@@ -168,8 +168,8 @@ namespace info_2022.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TextId"] = new SelectList(_context.Texts, "TextId", "Content", opinion.TextId);
-            ViewData["Id"] = new SelectList(_context.AppUsers, "Id", "Id", opinion.Id);
+            ViewData["TextId"] = opinion.TextId;
+            ViewData["Author"] = opinion.Id;
             return View(opinion);
         }
 
