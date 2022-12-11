@@ -114,6 +114,8 @@ namespace info_2022.Controllers
                 return NotFound();
             }
 
+            textWithOpinions.NewOpinion = new Opinion { TextId = (int)id, Id = textWithOpinions.SelectedText.Id };
+
             textWithOpinions.ReadingTime = (int)Math.Ceiling((double)textWithOpinions.SelectedText.Content.Length / 1400);
 
             textWithOpinions.CommentsNumber = _context.Opinions

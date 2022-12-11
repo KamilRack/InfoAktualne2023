@@ -49,6 +49,9 @@
                                             <li>
                                             <a class="dropdown-item text-dark" asp-area="" asp-controller="Texts" asp-action="List">Lista tekstów</a>
                                             </li>
+                                            <li>
+                                                <a class="dropdown-item text-dark" asp-area="" asp-controller="Opinions" asp-action="Index">Lista opinii</a>
+                                            </li>
                                         }
                                         @if (User.IsInRole("author"))
                                         {
