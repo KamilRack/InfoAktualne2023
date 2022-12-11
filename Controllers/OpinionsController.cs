@@ -9,6 +9,7 @@ using info_2022.Data;
 using info_2022.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace info_2022.Controllers
 {
@@ -66,7 +67,7 @@ namespace info_2022.Controllers
             {
                 return NotFound();
             }
-            Text text = _context.Texts.Find(id);
+            Models.Text text = _context.Texts.Find(id);
             if (text == null)
             {
                 return BadRequest();
@@ -140,7 +141,7 @@ namespace info_2022.Controllers
         [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OpinionId,Comment,AddedDate,Rating,TextId,Id")] Opinion opinion)
+        public async Task<IActionResult> Edit(int id, [Bind("OpinionId, Comment, AddedDate, Rating, TextId, Id")] Opinion opinion)
         {
             if (id != opinion.OpinionId)
             {
