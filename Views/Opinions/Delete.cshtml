@@ -1,14 +1,13 @@
 ﻿@model info_2022.Models.Opinion
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Kasowanie opinii";
 }
 
-<h1>Delete</h1>
+<h1 class="oswald text-primary">Kasowanie opinii</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3 class="text-success">Czy na pewno chcesz usunąć tę opinię?</h3>
 <div>
-    <h4>Opinion</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -33,19 +32,19 @@
             @Html.DisplayNameFor(model => model.Text)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Text.Content)
+            @Html.DisplayFor(model => model.Text.Title)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.User)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Id)
+            @Html.DisplayFor(model => model.User.FullName)
         </dd>
     </dl>
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="OpinionId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Usuń" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-light">Powrót do listy</a>
     </form>
 </div>
