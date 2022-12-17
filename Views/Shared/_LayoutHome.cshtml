@@ -14,7 +14,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 </head>
 <body>
-    <header>
+    <header class="container-fluid back">
+        <div class="row text-center col-10 offset-1 col-lg-8 offset-lg-2">
+            <div class="transparency mt-4">
+                <h1 class="info-title oswald mt-3">INFORMATYKA</h1>
+                <h4 class="lh-base text-light">Rozwiązuj z nami swoje problemy ze sprzętem i oprogramowaniem. Doskonal się w trudnej sztuce programowania. Rozwijaj się i pomagaj innym.</h4>
+                <a asp-area="Identity" asp-page="/Account/Register" class="btn btn btn-warning fst-italic mt-3 mb-4">Buduj z nami społeczność informatyków</a>
+            </div>
+        </div>
+    </header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/graphic/logo.png" alt="Portal InfoInfo" height="30px" /></a>
@@ -66,7 +74,7 @@
                 </div>
             </div>
         </nav>
-    </header>
+    
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
