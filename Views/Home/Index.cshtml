@@ -3,19 +3,18 @@
     ViewData["Title"] = "Witamy";
 }
 
-<div class="text-center">
-    <img src="https://pngimg.com/uploads/welcome/welcome_PNG78.png" />
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@model info_2022.Models.ViewModels.HomeDataVM;
+
+<!-- Kategorie -->
+<div class="row text-center py-5">
+    @foreach (var item in Model.DisplayCategories)
+    {
+        <div class="col-12 col-md-6 col-lg-4 my-3">
+            <a class="text-primary" asp-action="Index" asp-controller="Texts" asp-route-Kategoria="@item.CategoryId"><i class="bi-@item.Icon" style="font-size: 4rem;"></i></a>
+            <h2 class="oswald">@item.Name</h2>
+            <p>@item.Description</p>
+        </div>
+    }
 </div>
-
-<button type="button" class="btn btn-primary">Primary</button>
-<button type="button" class="btn btn-secondary">Secondary</button>
-<button type="button" class="btn btn-success">Success</button>
-<button type="button" class="btn btn-danger">Danger</button>
-<button type="button" class="btn btn-warning">Warning</button>
-<button type="button" class="btn btn-info">Info</button>
-<button type="button" class="btn btn-light">Light</button>
-<button type="button" class="btn btn-dark">Dark</button>
-
-<button type="button" class="btn btn-link">Link</button>
+<!-- Autorzy -->
+<!-- Dane adresowe -->
