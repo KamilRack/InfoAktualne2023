@@ -20,7 +20,7 @@ namespace info_2022.Models
         [DataType(DataType.MultilineText)]
         public string? Summary { get; set; }
 
-        [Display(Name = "Słowa kluczowe")]
+        [Display(Name = "Słowo kluczowe")]
         [MaxLength(255, ErrorMessage = "Słowa kluczowe nie mogą być dłuższe niż 255 znaków")]
         public string? Keywords { get; set; }
 
